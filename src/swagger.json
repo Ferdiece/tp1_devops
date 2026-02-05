@@ -1,0 +1,82 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "User API",
+    "version": "1.0.0",
+    "description": "Basic NodeJS REST API storing users in Redis"
+  },
+  "servers": [
+    { "url": "http://localhost:3001" }
+  ],
+  "paths": {
+    "/user": {
+      "post": {
+        "summary": "Create a user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["username", "firstname", "lastname"],
+                "properties": {
+                  "username": { "type": "string", "example": "sergkudinov" },
+                  "firstname": { "type": "string", "example": "Sergei" },
+                  "lastname": { "type": "string", "example": "Kudinov" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string" },
+                    "msg": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Bad Request" }
+        }
+      }
+    },
+    "/user/{username}": {
+      "get": {
+        "summary": "Get a user by username",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "username": { "type": "string" },
+                    "firstname": { "type": "string" },
+                    "lastname": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Not Found" }
+        }
+      }
+    }
+  }
+}
