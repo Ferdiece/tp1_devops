@@ -1,40 +1,44 @@
-name: Continuous Integration
+name: CI
+
 on:
   push:
-    branches: [ main ]
+    branches: [ "master", "main", "develop" ]
   pull_request:
-    branches: [ main ]
+    branches: [ "master", "main" ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
-    # Étape 3 du lab : Ajout du service Redis
     services:
       redis:
-        image: redis
+        image: redis:7-alpine
         ports:
           - 6379:6379
         options: >-
           --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 20
 
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Node.js
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
-      - name: Install dependencies
-        run: npm install
+      - name: Install
+        run: npm ci
 
       - name: Run tests
-        run: npm test
         env:
-          REDIS_HOST: localhost
+          NODE_ENV: test
+          # Si ton app lit host/port via conf/default.json -> OK.
+          # Sinon, ajoute ici les variables attendues par ton configure()
+          REDIS_HOST: 127.0.0.1
           REDIS_PORT: 6379
+        run: npm test
