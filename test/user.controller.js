@@ -36,26 +36,46 @@ describe('User', () => {
       })
     })
 
-    // it('avoid creating an existing user', (done)=> {
-    //   // TODO create this test
-    //   // Warning: the user already exists
+    // Bonus possible (non demandé)
+    // it('avoid creating an existing user', (done) => {
     //   done()
     // })
   })
 
-  // TODO Create test for the get method
-  // describe('Get', ()=> {
-  //   
-  //   it('get a user by username', (done) => {
-  //     // 1. First, create a user to make this unit test independent from the others
-  //     // 2. Then, check if the result of the get method is correct
-  //     done()
-  //   })
-  //
-  //   it('cannot get a user when it does not exist', (done) => {
-  //     // Chech with any invalid user
-  //     done()
-  //   })
-  //
-  // })
+  describe('Get', () => {
+
+    it('get a user by username', (done) => {
+      // 1) Create user first
+      const user = {
+        username: 'sergkudinov',
+        firstname: 'Sergei',
+        lastname: 'Kudinov'
+      }
+
+      userController.create(user, (errCreate, resultCreate) => {
+        expect(errCreate).to.be.equal(null)
+        expect(resultCreate).to.be.equal('OK')
+
+        // 2) Get user
+        userController.get('sergkudinov', (errGet, resultGet) => {
+          expect(errGet).to.be.equal(null)
+          expect(resultGet).to.deep.equal({
+            username: 'sergkudinov',
+            firstname: 'Sergei',
+            lastname: 'Kudinov'
+          })
+          done()
+        })
+      })
+    })
+
+    it('cannot get a user when it does not exist', (done) => {
+      userController.get('does_not_exist', (err, result) => {
+        expect(err).to.be.equal(null)
+        expect(result).to.be.equal(null)
+        done()
+      })
+    })
+
+  })
 })
