@@ -5,19 +5,19 @@ ING4 DATA&IA APP Gp01
 ---------------------------------
 
 
-TP6 – Interface as Code
+# TP6 – Interface as Code
 
 Après avoir installer tout ce qui est nécessaire pour le tp et copié le dossier du lab dans notre terminal, on commence par la partie 1
 
-Part 1. Imperative - Using Vagrant with Shell Provisioner
+## Part 1. Imperative - Using Vagrant with Shell Provisioner
 
-0)	Introduction
+### 0)	Introduction
 
 L’objectif est d’automatiser la création d’une machine virtuelle (VM) CentOS 7 et de tester la provisioning initial (configuration automatique au démarrage) pour modifier des fichiers système sans intervention manuelle interne.
 
 En tant qu’application dans le monde réel, nous pourrions prendre l’exemple d’une entreprise : cela permet de s’assurer que tous les développeurs travaillent sur une machine identique. Au lieu d’envoyer un manuel de 20 pages pour configurer un PC, on envoie un seul fichier Vagrantfile.
 
-1)	Préparation de l’environnement
+### 1)	Préparation de l’environnement
 
 L’objectif ici est donc de préparer le terminal et de vérifier les prérequis de virtualisation.
 On utilise la commande bcdedit pour vérifier si Hyper-V est actif afin d’éviter les conflits avec VirtualBox.
@@ -29,7 +29,7 @@ La capture d’écran ci-dessous de l’interface montre bien les deux machines 
 <img width="945" height="531" alt="image" src="https://github.com/user-attachments/assets/4198cbfc-bb03-47ce-af07-da0f38b4b8bc" />
 
 
-2)	Initialisation et démarrage de la VM
+### 2)	Initialisation et démarrage de la VM
 
 Lancement de la machine virtuelle définie dans le Vagrantfile avec la commande vagrant up.
 
@@ -41,7 +41,7 @@ Processus :
 <img width="945" height="68" alt="image" src="https://github.com/user-attachments/assets/b7faa641-9f4e-415e-9ecb-efa118f6aa63" />
 
 
-3)	Exploration et Provisioning personnalisé
+### 3)	Exploration et Provisioning personnalisé
 
 Une fois la machine lancée, nous avons testé la connexion et la modification de la configuration « à la volée ».
 
@@ -59,7 +59,7 @@ L’objectif était d’automatiser l’ajout d’un nom de domaine local dans l
 <img width="944" height="197" alt="image" src="https://github.com/user-attachments/assets/995e5a72-1bbe-4842-8a9f-c1986692c5fd" />
 
 
-4)	Automatisation avancée (horodatage)
+### 4)	Automatisation avancée (horodatage)
 
 Pour prouver que le provisioning s’exécute correctement, nous avons ajouté un marqueur de temps.
 
@@ -72,15 +72,15 @@ Pour prouver que le provisioning s’exécute correctement, nous avons ajouté u
 Cette partie du TP nous apprend bien a utiliser et comprendre le cycle de vie du provisioning : Modifier  Provisionner  Vérifier
 
 
-Part 2. Declarative - GitLab installation using Vagrant and Ansible Provisioner
+## Part 2. Declarative - GitLab installation using Vagrant and Ansible Provisioner
 
-0)	Introduction
+### 0)	Introduction
 
 Utiliser Ansible pour automatiser l’installation complexe d’un serveur GitLab sur une distribution Rocky Linux 8, incluant la gestion du firewall et des dépendances (Postfix, SSH).
 
 En tant qu’application dans le monde réel, on prendre l’exemple d’un déploiement d’outil : avec GitLab, manuellement cela prendrait des heures et comporte des rsiques d’erreurs. Avec Ansible, on peut déployer ou mettre à jour des dizaines de serveurs d’outils collaboratifs en une seule commande.
 
-1)	Initialisation de l’environnement
+### 1)	Initialisation de l’environnement
 
 Dans cette partie, on commence par changer de contexte pour travailler sur une infrastructure plus complexe.
 -	Navigation : on déplace vers le dossier lab\part-2 via PowerShell.
@@ -89,7 +89,7 @@ Dans cette partie, on commence par changer de contexte pour travailler sur une i
 <img width="712" height="166" alt="image" src="https://github.com/user-attachments/assets/e061cfb8-c778-4c39-a630-cf87031c987e" />
 
 
-2)	Déploiement de la machine « GitLab Server »
+### 2)	Déploiement de la machine « GitLab Server »
 
 On exécute le vagrant up dans cette partie et les actions se multiplient :
 -	Nouvelle distribution : contrairement à la partie 1, ici Vagrant télécharge et utilise Rocky Linux 8 (generic/rocky8)
@@ -101,7 +101,7 @@ o	Port Forwarding : redirection du port http 80 de la VM vers le port 8080 du PC
 
 <img width="898" height="899" alt="image" src="https://github.com/user-attachments/assets/9e7d2a81-efda-4e95-9ab9-2ab3c1539644" />
 
-3)	Exécution du playbook Ansible
+### 3)	Exécution du playbook Ansible
 
 Ansible exécute une série de tâches (TASKS) pour transformer une machine vierge en serveur GitLab opérationnel.
 
@@ -113,7 +113,7 @@ Etapes clés validées :
 
 <img width="945" height="682" alt="image" src="https://github.com/user-attachments/assets/1da75200-7053-4084-9cda-52d05fa396c3" />
 
-4)	Tests de connectivité et diagnostic
+### 4)	Tests de connectivité et diagnostic
 
 Test de ping : on exécute ping 192.168.121.240 et le résultat montre 0% de perte, ce qui prouve que la machine est bien allumée et que le réseau privé entre Windows et la VM fonctionne.
 
@@ -125,15 +125,15 @@ Accès Web (erreur 502) : En tentant d’accéder à l’interface, on obtient l
 <img width="945" height="333" alt="image" src="https://github.com/user-attachments/assets/86bbc1ba-f003-4a73-b760-7727f307f383" />
 
  
-Part 3. Declarative - Configure a health check for GitLab
+## Part 3. Declarative - Configure a health check for GitLab
 
-0)	Introduction
+### 0)	Introduction
 
 Objectif : verifier l’état de santé des services via des Healthchecks et utiliser les Tags Ansible pour isoler des tests spécifiques.
 
 Application : En production, il est crucial de savoir si un service est « vivant » et s’il est « prêt » à recevoir du trafic avant de diriger les utilisateurs vers lui.
 
-1)	Exploration des Tags Ansible
+### 1)	Exploration des Tags Ansible
 
 Une fois GitLab installé, l’objectif était de ne pas relancer tout le script mais seulement les tests de vérification.
 -	Commande : ansible-playbook avec l’option --list-tags
@@ -142,7 +142,7 @@ Une fois GitLab installé, l’objectif était de ne pas relancer tout le script
 <img width="763" height="522" alt="image" src="https://github.com/user-attachments/assets/25a7f62d-fbde-4da5-842a-b3d987d708a8" />
 
 
-2)	Exécution des Healthchecks
+### 2)	Exécution des Healthchecks
 
 On lance des tests pour voir si GitLab répond.
 
@@ -152,7 +152,7 @@ Bien que le code soit 502 (Bad Gateway), ce test reste un succés. Il prouve que
 
 <img width="945" height="918" alt="image" src="https://github.com/user-attachments/assets/928a33f4-5882-4ce0-abdd-de5912b016f1" />
 
-3)	Test de connectivité réseau finale
+### 3)	Test de connectivité réseau finale
 
 Pour finaliser cette partie, une vérification de la couche réseau de base a été effectuée.
 
@@ -162,11 +162,11 @@ Pour finaliser cette partie, une vérification de la couche réseau de base a é
 <img width="945" height="240" alt="image" src="https://github.com/user-attachments/assets/92a37673-be20-4b70-840d-d9bbe505bb28" />
 
 
-Bonus task
+## Bonus task
 
 L’objectif de cette partie est d’utiliser la puissance des variables Ansible pour modifier la configuration de la machine directement au moment de l’exécution, sans modifier le code source du Ploaybook.
 
-1)	Utilisation des variables extra
+### 1)	Utilisation des variables extra
 
 Au lieu d’utiliser le nom par défaut, nous avons injecté un nom de domaine personnalisé via la ligne de commande.
 -	Commande : exécution de la commande Ansible en ajoutant --extra-vars suivi du nom de domaine souhaité.
@@ -175,11 +175,11 @@ Au lieu d’utiliser le nom par défaut, nous avons injecté un nom de domaine p
 <img width="700" height="582" alt="image" src="https://github.com/user-attachments/assets/962c8657-960b-4205-ad11-c37b95b262dc" />
 
 
-2)	Vérification de la prise en compte
+### 2)	Vérification de la prise en compte
 
 Le succés de cette étape se confirme par le fait qu’Ansible ne renvoie pas d’erreur de syntaxe et applique la configuration sur la machine cible.
 
 
-Conclusion
+## Conclusion
 
 Ce lab démontre la puissance de l’IaC. En combiant Vagrant et Ansible, nous avons créé un environnement complexe, reproductible et documenté prêt pour un cycle de développement moderne.
