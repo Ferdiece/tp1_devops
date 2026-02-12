@@ -20,22 +20,22 @@ En tant qu’application dans le monde réel, nous pourrions prendre l’exemple
 ### 1)	Préparation de l’environnement
 
 L’objectif ici est donc de préparer le terminal et de vérifier les prérequis de virtualisation.
-On utilise la commande bcdedit pour vérifier si Hyper-V est actif afin d’éviter les conflits avec VirtualBox.
+On utilise la commande *bcdedit* pour vérifier si Hyper-V est actif afin d’éviter les conflits avec VirtualBox.
 
 Difficultés rencontrées : tentative d’utiliser un chemin générique. Résolution : Localisation du chemin réel sur le disque.
 
-La capture d’écran ci-dessous de l’interface montre bien les deux machines (centos.server.local et gitlab.server.local) en état « En fonction ».
+La capture d’écran ci-dessous de l’interface montre bien les deux machines (*centos.server.local* et *gitlab.server.local*) en état « En fonction ».
 
 <img width="945" height="531" alt="image" src="https://github.com/user-attachments/assets/4198cbfc-bb03-47ce-af07-da0f38b4b8bc" />
 
 
 ### 2)	Initialisation et démarrage de la VM
 
-Lancement de la machine virtuelle définie dans le Vagrantfile avec la commande vagrant up.
+Lancement de la machine virtuelle définie dans le Vagrantfile avec la commande *vagrant up*.
 
 Processus : 
 -	Téléchargement (box) : Vagrant a trouvé l’image centos/7 depuis le cloud.
--	Configuration réseau : mise en place du NAT et du transfert de port : le port 2222 de l’hôte redirige vers le port 22 de la VM.
+-	Configuration réseau : mise en place du NAT et du transfert de port : le port **2222** de l’hôte redirige vers le port **22** de la VM.
 -	Provisioning initial : au premier démarrage, Vagrant a exécuté le script par défaut qui a affiché « Hello Word »
 
 <img width="945" height="68" alt="image" src="https://github.com/user-attachments/assets/b7faa641-9f4e-415e-9ecb-efa118f6aa63" />
@@ -46,15 +46,15 @@ Processus :
 Une fois la machine lancée, nous avons testé la connexion et la modification de la configuration « à la volée ».
 
 Connexion SSH :
--	Commande : vagrant ssh
--	Vérification : Commandes whoami et pwd. En répondant respectivement « vagrant » et « /home/vagrant » la vérification est correcte.
+-	Commande : *vagrant ssh*
+-	Vérification : Commandes *whoami* et *pwd*. En répondant respectivement « vagrant » et « /home/vagrant » la vérification est correcte.
 
 Modification du fichier :
 
 L’objectif était d’automatiser l’ajout d’un nom de domaine local dans la VM.
 
 -	Tentative en ligne de commande : on observe un erreur quand on exécute -replace directement dans PowerShell (mauvaise syntaxe)
--	Résolution : on utilise notepad Vagrantfile pour modifier directement le script et on met à jour en exécutant vagrant provision. Cette commande permet de recharger uniquement les scripts sans redémarrer la machine contrairement à up.
+-	Résolution : on utilise *notepad Vagrantfile* pour modifier directement le script et on met à jour en exécutant *vagrant provision*. Cette commande permet de recharger uniquement les scripts sans redémarrer la machine contrairement à up.
 
 <img width="944" height="197" alt="image" src="https://github.com/user-attachments/assets/995e5a72-1bbe-4842-8a9f-c1986692c5fd" />
 
@@ -64,12 +64,12 @@ L’objectif était d’automatiser l’ajout d’un nom de domaine local dans l
 Pour prouver que le provisioning s’exécute correctement, nous avons ajouté un marqueur de temps.
 
 -	Modification du Vagrantfile : on ajoute une commande pour écrire la date actuelle dans un nouveau fichier.
--	Commande : vagrant provision
--	Résultat : le fichier /etc/vagrant_provisioned_at a été créé dans la VM avec la date exacte d’aujourd’hui : Thu Feb 12 14:01:06 UTC 2026
+-	Commande : *vagrant provision*
+-	Résultat : le fichier */etc/vagrant_provisioned_at* a été créé dans la VM avec la date exacte d’aujourd’hui : *Thu Feb 12 14:01:06 UTC 2026*
 
 <img width="944" height="201" alt="image" src="https://github.com/user-attachments/assets/fe321948-6f69-4735-8377-fc96870578ff" />
 
-Cette partie du TP nous apprend bien a utiliser et comprendre le cycle de vie du provisioning : Modifier  Provisionner  Vérifier
+Cette partie du TP nous apprend bien a utiliser et comprendre le cycle de vie du provisioning : Modifier --> Provisionner --> Vérifier
 
 
 ## Part 2. Declarative - GitLab installation using Vagrant and Ansible Provisioner
@@ -78,26 +78,26 @@ Cette partie du TP nous apprend bien a utiliser et comprendre le cycle de vie du
 
 Utiliser Ansible pour automatiser l’installation complexe d’un serveur GitLab sur une distribution Rocky Linux 8, incluant la gestion du firewall et des dépendances (Postfix, SSH).
 
-En tant qu’application dans le monde réel, on prendre l’exemple d’un déploiement d’outil : avec GitLab, manuellement cela prendrait des heures et comporte des rsiques d’erreurs. Avec Ansible, on peut déployer ou mettre à jour des dizaines de serveurs d’outils collaboratifs en une seule commande.
+En tant qu’application dans le monde réel, on prendre l’exemple d’un déploiement d’outil : avec GitLab, manuellement cela prendrait des heures et comporte des risques d’erreurs. Avec Ansible, on peut déployer ou mettre à jour des dizaines de serveurs d’outils collaboratifs en une seule commande.
 
 ### 1)	Initialisation de l’environnement
 
 Dans cette partie, on commence par changer de contexte pour travailler sur une infrastructure plus complexe.
--	Navigation : on déplace vers le dossier lab\part-2 via PowerShell.
--	Contenu du dossier : la commande dir montre la présence d’un dossier playbooks. C’est ici que sont stockées les instructions Ansible qui vont configurer la machine automatiquement.
+-	Navigation : on déplace vers le dossier *lab\part-2* via PowerShell.
+-	Contenu du dossier : la commande *dir* montre la présence d’un dossier *playbooks*. C’est ici que sont stockées les instructions Ansible qui vont configurer la machine automatiquement.
 
 <img width="712" height="166" alt="image" src="https://github.com/user-attachments/assets/e061cfb8-c778-4c39-a630-cf87031c987e" />
 
 
 ### 2)	Déploiement de la machine « GitLab Server »
 
-On exécute le vagrant up dans cette partie et les actions se multiplient :
--	Nouvelle distribution : contrairement à la partie 1, ici Vagrant télécharge et utilise Rocky Linux 8 (generic/rocky8)
+On exécute le *vagrant up* dans cette partie et les actions se multiplient :
+-	Nouvelle distribution : contrairement à la partie 1, ici Vagrant télécharge et utilise Rocky Linux 8 (*generic/rocky8*)
 -	Configuration réseau avancée :
 o	Adapter 1 (NAT) : pour l’accès internet
 o	Adapter 2 (Host-only) : création d’un réseau privé entre le PC et la VM
 o	Port Forwarding : redirection du port http 80 de la VM vers le port 8080 du PC.
--	Installation d’Ansible :  Vagrant détecte qu’Ansible n’est pas sur la machine et l’installe automatiquement (Installing Ansible…) pour pouvoir exécuter les scripts de configuration.
+-	Installation d’Ansible :  Vagrant détecte qu’Ansible n’est pas sur la machine et l’installe automatiquement (*Installing Ansible…*) pour pouvoir exécuter les scripts de configuration.
 
 <img width="898" height="899" alt="image" src="https://github.com/user-attachments/assets/9e7d2a81-efda-4e95-9ab9-2ab3c1539644" />
 
@@ -109,13 +109,13 @@ Etapes clés validées :
 -	Installation des dépendances : Postfix (pour les mails), OpenSSH et les certificats.
 -	Configuration du Firewall : Ouverture des accès http et HTTPS.
 -	Installation de GitLab : Téléchargement et exécution du script officiel, puis installation du package.
--	Résultat : ok=11 changed=9. Cela prouve que le script Ansible s’est déroulé parfaitement du début à la fin.
+-	Résultat : *ok=11 changed=9*. Cela prouve que le script Ansible s’est déroulé parfaitement du début à la fin.
 
 <img width="945" height="682" alt="image" src="https://github.com/user-attachments/assets/1da75200-7053-4084-9cda-52d05fa396c3" />
 
 ### 4)	Tests de connectivité et diagnostic
 
-Test de ping : on exécute ping 192.168.121.240 et le résultat montre 0% de perte, ce qui prouve que la machine est bien allumée et que le réseau privé entre Windows et la VM fonctionne.
+Test de ping : on exécute *ping 192.168.121.240* et le résultat montre 0% de perte, ce qui prouve que la machine est bien allumée et que le réseau privé entre Windows et la VM fonctionne.
 
 <img width="945" height="240" alt="image" src="https://github.com/user-attachments/assets/737bd77a-e3c0-469f-8712-b113aec2c1e3" />
 
@@ -136,8 +136,8 @@ Application : En production, il est crucial de savoir si un service est « vivan
 ### 1)	Exploration des Tags Ansible
 
 Une fois GitLab installé, l’objectif était de ne pas relancer tout le script mais seulement les tests de vérification.
--	Commande : ansible-playbook avec l’option --list-tags
--	La capture d’écran ci-dessous montre qu’on a réussi à lister les étapes du scénario. On y voit clairement les tags check et install. C’est une étape de « debug » essentielle pour cibler uniquement les tâches de vérification sans modifier la machine.
+-	Commande : *ansible-playbook* avec l’option *--list-tags*
+-	La capture d’écran ci-dessous montre qu’on a réussi à lister les étapes du scénario. On y voit clairement les tags *check* et *install*. C’est une étape de « debug » essentielle pour cibler uniquement les tâches de vérification sans modifier la machine.
 
 <img width="763" height="522" alt="image" src="https://github.com/user-attachments/assets/25a7f62d-fbde-4da5-842a-b3d987d708a8" />
 
@@ -146,7 +146,7 @@ Une fois GitLab installé, l’objectif était de ne pas relancer tout le script
 
 On lance des tests pour voir si GitLab répond.
 
--	Commande : ansible-playbook ... --tags check
+-	Commande : *ansible-playbook ... --tags check*
 -	Le rapport Ansible affiche trois tests (HEALTH, READINESS, LIVENESS) qui renvoient tous un Status 502.
 Bien que le code soit 502 (Bad Gateway), ce test reste un succés. Il prouve que la liaison entre Ansible et le serveur web de GitLab est établie. On peut considérer l’erreur 502 comme « normale » à ce stade car les services internes de GitLab mettent plus de temps à démarrer que l’infrastructure réseau.
 
