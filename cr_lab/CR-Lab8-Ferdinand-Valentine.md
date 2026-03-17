@@ -10,6 +10,15 @@ ING4 DATA&IA APP Gp01
 
 On commence par clonner les ressources dont on a besoin dans notre environnement git puis on passe à l'installation de minikube
 
+## Part 0. Introduction
+
+Objectif du Lab : Apprendre à orchestrer des conteneurs à l'échelle avec Kubernetes. Cela inclut le déploiement automatisé, le "scaling", la gestion des mises à jour sans interruption (Rolling Updates) et la configuration via des fichiers Manifest YAML.
+
+Application dans le monde réel : Kubernetes est utilisé par des entreprises comme Netflix ou Spotify. Si des milliers d'utilisateurs se connectent simultanément, Kubernetes crée automatiquement de nouveaux serveurs (Scaling) pour absorber la charge, et si un serveur plante, il le redémarre instantanément sans que l'utilisateur ne s'en aperçoive.
+
+Étape dans le cycle DevOps : Ce lab se situe dans l'étape "Deploy" et "Operate". On automatise la mise en production et on s'assure que l'application est résiliente et toujours disponible.
+
+
 ## Part 1. Install Minikube
 
 On start minikube :
@@ -131,11 +140,60 @@ Pour le service, on voit bien notre port 8080 qui est actif. Et le web est bien 
 
 
 
-Deployment.yaml : 
- 
+Code du deployment.yaml : 
 
-Service.yaml :
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubernetes-bootcamp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubernetes-bootcamp
+  template:
+    metadata:
+      labels:
+        app: kubernetes-bootcamp
+    spec:
+      containers:
+      - name: kubernetes-bootcamp
+        image: gcr.io/google-samples/kubernetes-bootcamp:v1
+        ports:
+        - containerPort: 8080
+```
+
+Code du service.yaml :
+
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubernetes-bootcamp
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 31000
+  selector:
+    app: kubernetes-bootcamp
+```
  
 
 Pour finir, on stoppe toutes nos ressources :
- 
+<img width="945" height="238" alt="image" src="https://github.com/user-attachments/assets/dff41206-9b95-411c-a18a-2ad8ea071690" />
+
+
+## Part 7. Finalité du Lab
+
+L'objectif du lab est-il rempli ? Oui selon nous.
+
+Pourquoi ?
+
+Nous avons réussi à sortir de l'isolement d'un conteneur unique pour gérer un cluster complet.
+
+Nous avons validé les mécanismes d'auto-hébergement : le cluster a su répartir la charge entre 5 pods et a su rejeter une mise à jour défectueuse (v3) sans couper le service pour les utilisateurs.
+
+Le passage au mode "Déclaratif" avec les fichiers YAML (Partie 6) montre que nous maîtrisons maintenant l'Infrastructure as Code (IaC), permettant de recréer tout l'environnement en une seule commande.
