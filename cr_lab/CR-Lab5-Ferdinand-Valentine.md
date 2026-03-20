@@ -1,6 +1,14 @@
+Ferdinand DELOISON & Valentine BOURY
 
 
-# Compte-rendu de Lab : CI/CD (GitHub Actions & Heroku)
+ING4 DATA&IA APP Gp01
+
+---------------------------------
+
+
+# TP5 - CI/CD (GitHub Actions & Heroku)
+
+Réponses aux questions "bilan" :
 
 ## 1. Objectif du lab
 
