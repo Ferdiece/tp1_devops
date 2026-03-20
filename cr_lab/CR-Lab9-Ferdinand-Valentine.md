@@ -1,4 +1,14 @@
-# Compte-rendu de Lab 9 : Stockage Kubernetes
+Ferdinand DELOISON & Valentine BOURY
+
+
+ING4 DATA&IA APP Gp01
+
+---------------------------------
+
+
+# TP9 : Stockage Kubernetes
+
+Réponses aux questions "bilan" : 
 
 ## 1. Objectifs du lab
 
