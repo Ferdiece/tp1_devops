@@ -6,7 +6,7 @@ ING4 DATA&IA APP Gp01
 ---------------------------------
 
 
-# TP5 - CI/CD (GitHub Actions & Heroku)
+# TP5 - CI/CD
 
 Réponses aux questions "bilan" :
 
